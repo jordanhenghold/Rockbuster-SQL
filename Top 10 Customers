@@ -1,0 +1,15 @@
+--A SQL Query utilizing CTE which displayed Top 10 customers with highest revenue paid
+
+WITH category_name_cte(country,city,rental_id,amount) AS
+(SELECT D.country,C.city,E.rental_id ,E.amount
+FROM customer A
+JOIN address B ON A.address_id=B.address_id
+JOIN city C ON B.city_id=C.city_id
+JOIN country D ON C.country_id=D.country_id
+JOIN payment E ON A.customer_id=E.customer_id
+)
+SELECT country,city,COUNT(rental_id) AS number_of_rental,SUM(amount) AS revenue
+FROM category_name_cte
+GROUP BY country,city
+ORDER BY revenue DESC
+LIMIT 10;
